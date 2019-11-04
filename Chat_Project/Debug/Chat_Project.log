@@ -1,3 +1,2 @@
-﻿  main.cpp
-  Chat_Project.vcxproj -> C:\Users\bsrego\Documents\Chat_Project\Debug\Chat_Project.exe
-  Chat_Project.vcxproj -> C:\Users\bsrego\Documents\Chat_Project\Debug\Chat_Project.pdb (Partial PDB)
+﻿  Server.cpp
+d:\new folder of files\unisinos\2019-2\redes para computadores\chat_project\chat_project\server.cpp(26): error C2102: '&' requer l-value
