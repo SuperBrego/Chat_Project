@@ -1,0 +1,8 @@
+Include:
+..\SFML-2.5.1\include;%(AdditionalIncludeDirectories)
+
+Lib:
+..\SFML-2.5.1\lib
+
+Linker:
+sfml-main-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-s-d.lib;sfml-graphics-d.lib;
