@@ -1,19 +1,30 @@
 #include "Server.h"
 
 Server::Server() {
-	
 	connect();
-	
+
 }
 
+int Server::run() {
 
-
-int Server::awaitConnection() {
-
-	if (listener.accept(clients) != sf::Socket::Done)
-	{
-		printf("Problema em receber.\n");
+	if (listener.accept(client) != sf::Socket::Done) {
+		printf("Problema em conectar ao cliente.\n");
 		return 0;
+	}
+
+	char data[100];
+	std::size_t received;
+
+	while (true) {
+
+
+		// TCP socket:
+		if (client.receive(data, 100, received) != sf::Socket::Done) {
+			printf("Problema em conectar em receber os dados.\n");
+			return 0;
+		}
+		printf("%s\n", data);
+		printf("\n");
 	}
 
 	return 1;
@@ -22,26 +33,21 @@ int Server::awaitConnection() {
 
 void Server::connect() {	
 
-	int num = 1;
-	sf::Thread thread(&Server::awaitConnection);
-	//sf::Thread second_Client(&awaitConnection);
+	printf("= Iniciando conexao.\n");
 
-	//first_Client.launch();
-
-	printf("DEBUG: Sucesso no Listen.\n");
-
-}
-
-void Server::run() {
-	while (true) {
-		if (clients.receive(data, 100, received) != sf::Socket::Done)
-		{
-			//printf("Problema na transferencia.\n");
-			std::cout << "Received " << received << " bytes" << std::endl;
-		}
-		else {
-			std::cout << "Data " << data << std::endl;
-			std::cout << "Received " << received << " bytes" << std::endl;
-		}
+	if (listener.listen(53000) != sf::Socket::Done) {
+		printf("Problema em abrir socket.\n");
 	}
+
+	printf("= Listen de Porta Operante normalmente.\n");
+	printf("== Aguardando Prompts.\n");
+
+	std::thread waitingPrompts(&Server::run, this);
+	//std::thread second(&Server::awaitConnection, this);
+
+	waitingPrompts.join();
+	
+	//second.join();
+
 }
+
