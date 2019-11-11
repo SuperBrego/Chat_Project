@@ -27,8 +27,6 @@ class ApplicationFlow {
 public:
 	ApplicationFlow() {
 		render = new Render();
-		//server = new Server();
-		//clients = new Client[2];
 	}
 	~ApplicationFlow() {}
 
