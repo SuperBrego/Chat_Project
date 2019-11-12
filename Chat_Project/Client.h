@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include <SFML/Network.hpp>
 
@@ -9,7 +10,7 @@
 class Client {
 
 	sf::TcpSocket socket;
-	char* client_name;
+	std::string client_name;
 	Protocol* message;
 
 	void commandValidation();

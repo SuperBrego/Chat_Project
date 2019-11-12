@@ -2,7 +2,8 @@
 
 Client::Client() {
 
-	
+	client_name = "";
+
 	char exit_prompt;
 	if (!connect()) {
 		printf("==== Houve um problema com a aplicacao. Por favor reinicie. ====\n");
@@ -79,17 +80,17 @@ void Client::commandValidation() {
 		printf("- 3: Direita\n");
 		printf("==================\n");
 		std::cin >> dir;
-		while (dir) {
-			while (dir > 3 || dir < 0) {
-				printf("Comando Invalido.\n");
-				printf("=== Qual o tipo de acao: ===\n");
-				printf("- 1: Ataque\n");
-				printf("- 2: Bloquear\n");
-				printf("- 3: Esquivar\n");
-				printf("==================\n");
-				std::cin >> dir;
-			}
+		while (dir > 3 || dir < 0) {
+			printf("Comando Invalido.\n");
+			printf("=== Qual o tipo de acao: ===\n");
+			printf("- 0: Cima\n");
+			printf("- 1: Baixo\n");
+			printf("- 2: Esquerda\n");
+			printf("- 3: Direita\n");
+			printf("==================\n");
+			std::cin >> dir;
 		}
+		
 	}
 	//Esquiva
 	else {

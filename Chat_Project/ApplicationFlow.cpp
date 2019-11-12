@@ -2,7 +2,7 @@
 
 void ApplicationFlow::startUp() {
 
-	render->startApplication();
+	//render->startApplication();
 
 	printf("======== INICIALIZANDO ========\n");
 	printf("Inicio de Aplicacao - Digite:\n- 1 para Servidor\n- 2 para Cliente\n- 0 para sair\n");

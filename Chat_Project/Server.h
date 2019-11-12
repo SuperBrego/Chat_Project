@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include <string>
 
 #include <SFML/Network.hpp>
 #include <SFML/System.hpp>
@@ -11,7 +12,7 @@
 class Server {
 
 	sf::TcpListener listener;
-	sf::TcpSocket client;
+	std::vector<sf::TcpSocket> clients;
 
 	char data[100];
 	std::size_t received;

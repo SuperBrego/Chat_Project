@@ -2,28 +2,29 @@
 
 Server::Server() {
 	connect();
-
 }
 
 int Server::run() {
+
+	sf::TcpSocket client;
 
 	if (listener.accept(client) != sf::Socket::Done) {
 		printf("Problema em conectar ao cliente.\n");
 		return 0;
 	}
-
-	char data[100];
+	//https://www.sfml-dev.org/documentation/2.5.1/classsf_1_1SocketSelector.php
+	Protocol* item = new Protocol();
 	std::size_t received;
 
 	while (true) {
 
-
 		// TCP socket:
-		if (client.receive(data, 100, received) != sf::Socket::Done) {
+		if (client.receive(item, 100, received) != sf::Socket::Done) {
 			printf("Problema em conectar em receber os dados.\n");
 			return 0;
 		}
-		printf("%s\n", data);
+
+		item->toString();
 		printf("\n");
 	}
 
@@ -40,14 +41,13 @@ void Server::connect() {
 	}
 
 	printf("= Listen de Porta Operante normalmente.\n");
-	printf("== Aguardando Prompts.\n");
+	printf("== Aguardando Prompts ==\n");
 
-	std::thread waitingPrompts(&Server::run, this);
-	//std::thread second(&Server::awaitConnection, this);
+	std::thread first_client(&Server::run, this);
+	std::thread second_client(&Server::run, this);
 
-	waitingPrompts.join();
-	
-	//second.join();
+	first_client.join();
+	//second_client.join();
 
 }
 
