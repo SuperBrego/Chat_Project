@@ -12,6 +12,7 @@ class Client {
 	sf::TcpSocket socket;
 	std::string client_name;
 	Protocol* message;
+	Character playerData;
 
 	void commandValidation();
 
@@ -21,4 +22,5 @@ public:
 
 	int connect();
 	void run();
+	void extractReply(Protocol* reply);
 };

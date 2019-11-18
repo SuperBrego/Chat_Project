@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 
+#include "Character.h"
 #include "Message.h"
 
 #pragma once
@@ -9,20 +10,20 @@
 class Protocol {
 
 	std::string clientName;
-	int message_type; // 1 - Ataque, 2 - Bloquear, 3 - Esquivar
-	int direction; // 0 - Cima, 1 - Baixo, 2 - Esquerda, 3 - Direita
+	Message message;
+	Character playerData;
 
 public:
 	Protocol() {};
 	~Protocol() {};
 
 	void setClientName(std::string name);
-	void setMessageType(int type);
-	void setDirection(int dir);
+	void setMessage(Message msg);
+	void setPlayerCharacter(Character data);
 
 	std::string getclientName();
-	int getMessageType();
-	int getDirection();
+	Message getMessage();
+	Character getPlayerData();
 	
 	void toString();
 

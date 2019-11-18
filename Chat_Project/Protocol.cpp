@@ -1,25 +1,12 @@
 #include "Protocol.h"
 
-void Protocol::setClientName(std::string name) {
-	clientName = name;
-}
-void Protocol::setMessageType(int type) {
-	message_type = type;
-}
-void Protocol::setDirection(int dir) {
-	direction = dir;
-}
+void Protocol::setClientName(std::string name) { clientName = name; }
+void Protocol::setMessage(Message msg) { message = msg; }
+void Protocol::setPlayerCharacter(Character data) { playerData = data; }
 
-
-std::string Protocol::getclientName() {
-	return clientName;
-}
-int Protocol::getMessageType() {
-	return message_type;
-}
-int Protocol::getDirection() { 
-	return direction;
-}
+std::string Protocol::getclientName() { return clientName; }
+Message Protocol::getMessage() { return message; }
+Character Protocol::getPlayerData() { return playerData; }
 
 void Protocol::toString() {
 
@@ -28,7 +15,7 @@ void Protocol::toString() {
 	output += "==== Jogador: " + clientName + " ====\n";
 	output += "== Acao: ";
 	
-	switch (message_type) {
+	switch (message.getMessageType()) {
 		case 1:
 			output += "Ataque";
 			break;
@@ -38,33 +25,37 @@ void Protocol::toString() {
 			output += "Esquivar";
 			break;
 		default:
+			output += "Server Reply";
 			break;
 	}
 	output += " ==\n";
-	if (message_type == 3) {
+	if (message.getMessageType() > 2 || message.getMessageType() < 1) {
 		output += "========";
 	}
 	else {
 		output += "== Direcao: ";
 
-		switch (direction) {
+		switch (message.getDirection()) {
 		case 0:
 			output += "Cima";
 			break;
 		case 1:
-			output += "Bloquear";
+			output += "Baixo";
 		case 2:
-			output += "Esquivar";
+			output += "Esquerda";
 			break;
 		case 3:
-			output += "Esquivar";
+			output += "Direita";
 			break;
 		default:
 			break;
 		}
 
-		output += "==\n";
+		output += " ==\n";
 	}
+
+	output += "\n";
+	output += "=== Vida Total: " + std::to_string( playerData.getHealthPoints() ) + " ===\n";
 
 	printf("%s\n", output.c_str());
 

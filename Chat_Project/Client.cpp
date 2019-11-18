@@ -6,27 +6,48 @@ Client::Client() {
 
 	char exit_prompt;
 	if (!connect()) {
-		printf("==== Houve um problema com a aplicacao. Por favor reinicie. ====\n");
+		printf("==== Nao ha nenhum servidor rodando. Por favor entre em contato com o servidor e tente novamente. ====\n");
 		std::cin >> exit_prompt;
 		std::cin.ignore();
+
 	}
 	else {
 
-		printf("==== Digite seu login: ====\n");
-		std::cin >> client_name;
-		
-		message = new Protocol();
-		message->setClientName(client_name);
+		char login[100];
 
-		run();
+		printf("==== Digite seu login: ====\n");
+		std::cin >> login;
+		
+		// Nome do cliente para o Protocolo
+		client_name = login;
+
+		// Envia Login
+		if (socket.send(login, 100) == sf::Socket::Done) {
+		
+			// Receive an answer from the server
+			char buffer[1024];
+			std::size_t received = 0;
+			socket.receive(buffer, sizeof(buffer), received);
+			std::cout << buffer << std::endl;
+
+			message = new Protocol();
+			message->setClientName(client_name);
+			message->setPlayerCharacter(playerData);
+
+			run();
+		}
 	}
 
 }
 
 int Client::connect() {
 	
+	std::string ip;
+	std::cout << "Digite o IP destino: \n";
+	std::cin >> ip;
+
 	sf::Time t1 = sf::seconds(1.f);
-	sf::Socket::Status status = socket.connect("191.4.195.245", 53000);
+	sf::Socket::Status status = socket.connect(ip, 52000);
 	
 	if (status != sf::Socket::Done) {
 		return 0;
@@ -46,6 +67,18 @@ void Client::run() {
 		if (socket.send(message, sizeof(Protocol)) != sf::Socket::Done) {
 			printf("Erro on Sent.\n");
 		}
+
+		// Receive an answer from the server
+		Protocol* serverReply = new Protocol();
+		std::size_t received = 0;
+		sf::Socket::Status status = socket.receive(serverReply, sizeof(Protocol), received);
+
+		printf("== Aguardando resposta do servidor ==\n");
+		while (status != sf::Socket::Done) { }
+		printf("== Retorno ==\n");
+		serverReply->toString();
+		printf("== ------------------------------ ==\n");
+		extractReply(serverReply);
 	}
 
 }
@@ -98,6 +131,13 @@ void Client::commandValidation() {
 	}
 	printf("\n");
 
-	message->setMessageType(type);
-	message->setDirection(dir);
+	Message msg;
+
+	msg.setMessageType(type);
+	msg.setDirection(dir);
+	message->setMessage(msg);
+}
+
+void Client::extractReply(Protocol* reply) {
+
 }

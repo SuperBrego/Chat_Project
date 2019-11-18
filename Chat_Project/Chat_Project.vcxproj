@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{9B362215-C90C-4C21-B538-02FC9103D9B2}</ProjectGuid>
     <RootNamespace>Chat_Project</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="ApplicationFlow.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Protocol.cpp" />
     <ClCompile Include="Render.cpp" />
@@ -132,7 +133,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationFlow.h" />
+    <ClInclude Include="Character.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="Protocol.h" />
     <ClInclude Include="Render.h" />
