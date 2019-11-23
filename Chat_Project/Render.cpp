@@ -20,10 +20,10 @@ void Render::startApplication() {
 	window = new sf::RenderWindow();
 
 	createWindow();
-	runDrawing();
+
 }
 
-void Render::runDrawing() {
+void Render::awaitScreen() {
 
 	background = sf::RectangleShape(sf::Vector2f(1200.f, 400.f));
 	background.setOrigin(sf::Vector2f(0.0f, -100.0f));

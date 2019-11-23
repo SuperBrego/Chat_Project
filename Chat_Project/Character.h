@@ -11,6 +11,7 @@ public:
 	void takeDamage() { health_points--; }
 	void recoverDamage() { health_points++; }
 
+	void setHealthPoints(int hp) { health_points = hp; }
 	int getHealthPoints() { return health_points; }
 	std::string getSpritePath() { return sprite_path; }
 };

@@ -15,11 +15,18 @@ class Render {
 
 	// Test Function
 	void runDrawing();
-
-public:
-	void startApplication();
+	
 	void drawApplication();
 	void drawSprite();
+
+public:
+	Render() {}
+
+	void startApplication();
+	
+	void awaitScreen();
+	void renderPlayer();
+	void renderSecondPlayer();
 
 	// Getters
 	sf::RenderWindow* getWindow() { return window; }

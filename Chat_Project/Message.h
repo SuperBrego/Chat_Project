@@ -12,7 +12,7 @@ public:
 	void setMessageType(int type) {
 		message_type = type;
 	}
-	void setDirection(int dir) {
+	void setTypeCommand(int dir) {
 		direction = dir;
 	}
 
@@ -23,7 +23,7 @@ public:
 	int getMessageType() {
 		return message_type;
 	}
-	int getDirection() {
+	int getTypeCommand() {
 		return direction;
 	}
 

@@ -35,7 +35,7 @@ void Protocol::toString() {
 	else {
 		output += "== Direcao: ";
 
-		switch (message.getDirection()) {
+		switch (message.getTypeCommand()) {
 		case 0:
 			output += "Cima";
 			break;
@@ -56,6 +56,7 @@ void Protocol::toString() {
 
 	output += "\n";
 	output += "=== Vida Total: " + std::to_string( playerData.getHealthPoints() ) + " ===\n";
+	//output += message.getServerReply() + "\n";
 
 	printf("%s\n", output.c_str());
 

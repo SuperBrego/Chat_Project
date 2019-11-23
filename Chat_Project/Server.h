@@ -34,4 +34,6 @@ public:
 
 	void replyClients();
 	void replyClients(sf::TcpSocket* client);
+
+	void updateRenderPlayers(int currPlayers);
 };

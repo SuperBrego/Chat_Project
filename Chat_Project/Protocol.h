@@ -14,7 +14,9 @@ class Protocol {
 	Character playerData;
 
 public:
-	Protocol() {};
+	Protocol() {
+		message.setServerReply("");
+	};
 	~Protocol() {};
 
 	void setClientName(std::string name);

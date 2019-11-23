@@ -2,6 +2,8 @@
 
 Client::Client() {
 
+	
+
 	client_name = "";
 
 	char exit_prompt;
@@ -58,8 +60,19 @@ int Client::connect() {
 
 void Client::run() {
 
+	// RENDERING TEM QUE SER UMA THREAD
+	render = new Render();
+	render->startApplication();
+
+	//sf::Thread renderWindow(&Client::ClientRender, this);
+
+	//renderWindow.launch();
+
+
 	while (true) {
-		
+
+		// clientRender();
+	
 		commandValidation();
 
 		printf("=== Enviando Mensagem ===\n");
@@ -75,10 +88,9 @@ void Client::run() {
 
 		printf("== Aguardando resposta do servidor ==\n");
 		while (status != sf::Socket::Done) { }
-		printf("== Retorno ==\n");
-		serverReply->toString();
 		printf("== ------------------------------ ==\n");
 		extractReply(serverReply);
+
 	}
 
 }
@@ -88,7 +100,7 @@ void Client::commandValidation() {
 	int type;
 	int dir;
 
-	printf("=== Qual o tipo de acao: ===\n");
+	printf("\n=== Qual o tipo de acao: ===\n");
 	printf("- 1: Ataque\n");
 	printf("- 2: Bloquear\n");
 	printf("- 3: Esquivar\n");
@@ -134,10 +146,43 @@ void Client::commandValidation() {
 	Message msg;
 
 	msg.setMessageType(type);
-	msg.setDirection(dir);
+	msg.setTypeCommand(dir);
 	message->setMessage(msg);
 }
 
 void Client::extractReply(Protocol* reply) {
+	
+	// Mensagem de Render
+	if (reply->getMessage().getMessageType() == 1) {
+		int renderPlural = reply->getMessage().getTypeCommand();
+
+		if (renderPlural < 2) {
+
+		}
+		else {
+
+		}
+	}
+
+	// Mensagem de Status
+	if (reply->getMessage().getMessageType() == 2) {
+
+		Character serverCharData = reply->getPlayerData();
+		this->playerData.setHealthPoints(
+			this->playerData.getHealthPoints() +
+			serverCharData.getHealthPoints()
+		);
+		system("cls");
+		printf("=== Player %s ===\n", this->client_name.c_str());
+		printf("==== Pontos de Vida Total: ====\n");
+		printf("===== %d =====\n", this->playerData.getHealthPoints());
+
+	}
+
+}
+
+void Client::ClientRender() {
+
+	render->awaitScreen();
 
 }

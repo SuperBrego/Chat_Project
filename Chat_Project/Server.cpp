@@ -75,11 +75,12 @@ void Server::run() {
 
 						// The client has sent some data, we can receive it
 						if (client.receive(item, sizeof(Protocol), received) == sf::Socket::Done) {
-							//item->toString();
-							//treatMessage(item);
-							replyClients(&client);
+							treatMessage(item);
 
-							//if (gLogic->gameStepReady()) { replyClients(); }
+							if (gLogic->gameStepReady()) { 
+								replyClients(); 
+								gLogic->reset();
+							}
 						}
 					}// Fim de Cliente pronto
 				}// Fim de FOR de iterador
@@ -91,17 +92,76 @@ void Server::run() {
 
 void Server::treatMessage(Protocol* proto) {
 
-	proto->toString();
-
 	Message msg = proto->getMessage();
-
-	/*
+	
 	gLogic->receiveMessage(
 		proto->getclientName(),
-		msg->getMessageType(),
-		msg->getDirection()
+		msg.getMessageType(),
+		msg.getTypeCommand()
 	);
-	*/
+	
+}
+
+void Server::updateRenderPlayers(int currPlayers) {
+
+	// Temos mais 
+	if (currPlayers >= 2) {
+
+		// The listener socket is not ready, test all other sockets (the clients)
+		for (std::vector< std::pair< sf::TcpSocket*, std::string>>::iterator it = clients.begin(); it != clients.end(); ++it) {
+
+			sf::TcpSocket* client = it->first;
+
+			// Send an answer
+			Protocol* retorno = new Protocol();
+
+			Message msg;
+
+			// 1- Render, 2- Status
+			msg.setMessageType(1);
+
+			// 1- No players, 2 - two players
+			msg.setTypeCommand(2);
+
+			retorno->setClientName("Server");
+			retorno->setMessage(msg);
+
+			client->send(retorno, sizeof(Protocol));
+		}
+
+	}
+
+
+}
+
+void Server::replyClients() {
+
+	// The listener socket is not ready, test all other sockets (the clients)
+	for (std::vector< std::pair< sf::TcpSocket*, std::string>>::iterator it = clients.begin(); it != clients.end(); ++it) {
+
+		sf::TcpSocket* client = it->first;
+		int healthPoints = gLogic->getPlayerHP( it->second );
+		
+		// Send an answer
+		Protocol* retorno = new Protocol();
+		
+		Message msg;
+		// 1- Render, 2- Status
+		msg.setMessageType(2);
+		msg.setTypeCommand(0);
+		retorno->setClientName("Server");
+		retorno->setMessage(msg);
+
+		// Updated Health Points
+		Character charact;
+		charact.setHealthPoints(healthPoints);
+		retorno->setPlayerCharacter(charact);
+
+		client->send(retorno, sizeof(Protocol));
+	}
+
+	printf("\n=== Mensagens Enviadas === \n");
+
 }
 
 void Server::replyClients(sf::TcpSocket* client) {
@@ -109,10 +169,11 @@ void Server::replyClients(sf::TcpSocket* client) {
 	// Send an answer
 	Protocol* retorno = new Protocol();
 	Message msg;
-	msg.setMessageType(0);
-	msg.setDirection(0);
+	// 1- Render, 2- Status
+	msg.setMessageType(2);
+	msg.setTypeCommand(0);
 	Character charact;
-	msg.setServerReply("Recebi sua mensagem");
+	//msg.setServerReply("Recebi sua mensagem.");
 	retorno->setClientName("Server");
 	retorno->setMessage(msg);
 	retorno->setPlayerCharacter(charact);

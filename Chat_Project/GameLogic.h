@@ -1,25 +1,44 @@
 #include <utility>
 #include <string>
+#include <vector>
 
 #include "Protocol.h"
 #include "Character.h"
 
 #pragma once
 
+struct PlayerAction {
+	std::string login;
+	int action, direction;
+	int currentHealthPoints;
+};
+
 class GameLogic {
 
-	int currentRound;
+	std::vector<PlayerAction*> playerMessages;
+	int readyStep;
+
+
 
 public:
 	GameLogic() {
-		currentRound = 0;
+		readyStep = 0;
 	}
 	~GameLogic() {}
 
-	void addClient(std::string login);
-
 	void receiveMessage(std::string login, int action, int direction);
 
-	int gameStepReady();
+	void reset();
+	void gameStep();
+
+	int gameStepReady() { return readyStep; }
+	int getPlayerHP(std::string playerName) {
+
+		for (int i = 0; i < playerMessages.size(); i++) {
+			if (playerMessages.at(i)->login == playerName) {
+				return playerMessages.at(i)->currentHealthPoints;
+			}
+		}
+	}
 
 };

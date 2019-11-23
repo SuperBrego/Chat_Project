@@ -1,0 +1,14 @@
+﻿  ApplicationFlow.cpp
+c:\users\bsrego\documents\chat_project\chat_project\ApplicationFlow.h(2): fatal error C1083: Não é possível abrir arquivo incluir: 'SFML/Graphics.hpp': No such file or directory
+  Client.cpp
+c:\users\bsrego\documents\chat_project\chat_project\Client.h(4): fatal error C1083: Não é possível abrir arquivo incluir: 'SFML/Network.hpp': No such file or directory
+  GameLogic.cpp
+c:\users\bsrego\documents\chat_project\chat_project\Character.h(1): fatal error C1083: Não é possível abrir arquivo incluir: 'SFML/Graphics.hpp': No such file or directory
+  main.cpp
+main.cpp(6): fatal error C1083: Não é possível abrir arquivo incluir: 'SFML/Graphics.hpp': No such file or directory
+  Protocol.cpp
+c:\users\bsrego\documents\chat_project\chat_project\Character.h(1): fatal error C1083: Não é possível abrir arquivo incluir: 'SFML/Graphics.hpp': No such file or directory
+  Render.cpp
+c:\users\bsrego\documents\chat_project\chat_project\Render.h(3): fatal error C1083: Não é possível abrir arquivo incluir: 'SFML/Graphics.hpp': No such file or directory
+  Server.cpp
+c:\users\bsrego\documents\chat_project\chat_project\Server.h(6): fatal error C1083: Não é possível abrir arquivo incluir: 'SFML/Network.hpp': No such file or directory
