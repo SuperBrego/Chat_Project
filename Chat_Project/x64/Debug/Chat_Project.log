@@ -1,11 +1,18 @@
-﻿  ApplicationFlow.cpp
-  Client.cpp
-  GameLogic.cpp
-  main.cpp
-  Protocol.cpp
+﻿  Server.cpp
   Render.cpp
-  Server.cpp
+c:\users\bsrego\source\repos\chat_project\chat_project\render.cpp(53): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\bsrego\source\repos\chat_project\chat_project\render.cpp(65): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+c:\users\bsrego\source\repos\chat_project\chat_project\render.cpp(94): warning C4305: 'inicializando': truncamento de 'double' para 'float'
+c:\users\bsrego\source\repos\chat_project\chat_project\render.cpp(97): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
+c:\users\bsrego\source\repos\chat_project\chat_project\render.cpp(98): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
+c:\users\bsrego\source\repos\chat_project\chat_project\render.cpp(134): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
+c:\users\bsrego\source\repos\chat_project\chat_project\render.cpp(135): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
+c:\users\bsrego\source\repos\chat_project\chat_project\render.cpp(141): warning C4244: 'argumento': conversão de 'int' para 'float', possível perda de dados
+  Protocol.cpp
+  main.cpp
+  GameLogic.cpp
+  Client.cpp
+  ApplicationFlow.cpp
   Gerando Código...
-d:\new folder of files\unisinos\2019-2\redes para computadores\chat_project\chat_project\gamelogic.h(42): warning C4715: 'GameLogic::getPlayerHP': nem todos os caminhos de controle retornam um valor
-C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppCommon.targets(720,5): error MSB6006: "link.exe" foi encerrado com o código 1112.
+c:\users\bsrego\source\repos\chat_project\chat_project\gamelogic.cpp(70): warning C4715: 'GameLogic::getPlayerHP': nem todos os caminhos de controle retornam um valor
 sfml-system-d.lib(sfml-system-d-2.dll) : fatal error LNK1112: tipo de módulo de máquina 'x86' conflita com tipo de máquina alvo 'x64'

@@ -37,6 +37,6 @@ public:
 	void treatMessage(Protocol* message);
 	void replyClients();
 
-	void updateRenderPlayers(int currPlayers);
+	void updateRenderPlayers();
 	void callEndgame();
 };

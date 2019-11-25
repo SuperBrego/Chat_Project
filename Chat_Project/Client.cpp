@@ -68,6 +68,7 @@ void Client::startRender() {
 	render->setCurrentHearts(currentHealth);
 	render->setCurrentState(state);
 	render->setCurrentDirection(direction);
+	render->setRenderSecondPlayer(true);
 	render->startApplication();
 
 }
@@ -123,7 +124,6 @@ void Client::run() {
 			printf("== Aguardando resposta do servidor ==\n");
 			while (status != sf::Socket::Done) {}
 			extractReply(serverReply);
-
 
 			// Aguardar proxima mensagem
 			readySent = false;
@@ -190,11 +190,11 @@ void Client::extractReply(Protocol* reply) {
 	if (reply->getMessage().getMessageType() == 1) {
 		int renderPlural = reply->getMessage().getTypeCommand();
 
-		if (renderPlural < 2) {
-
+		if (renderPlural == 2) {
+			render->setRenderSecondPlayer(true);
 		}
-		else {
-
+		else if(renderPlural > 2){
+			
 		}
 	}
 

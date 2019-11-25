@@ -24,12 +24,10 @@ void GameLogic::reset() {
 
 void GameLogic::gameStep() {
 
-	srand(NULL);
-
-	printf("%d", (rand() % 100));
-
 	PlayerAction* player1 = playerMessages.at(0);
 	PlayerAction* player2 = playerMessages.at(1);
+
+	srand(time(NULL));
 
 	if (player1->action == 0) {
 

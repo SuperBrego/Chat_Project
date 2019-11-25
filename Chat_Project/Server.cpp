@@ -34,6 +34,12 @@ void Server::connectClient(sf::TcpSocket* client) {
 
 		// Adiciona cleinte ao seletor para ser notificado quando ele enviar algo.
 		selector.add(*client);
+
+		if (clients.size() > 1) {
+			updateRenderPlayers();
+		}
+
+
 	}
 	else delete client;
 	
@@ -98,11 +104,6 @@ void Server::run() {
 // Trata mensagem do jogo.
 void Server::treatMessage(Protocol* proto) {
 
-	if (proto->getHealthPoints() < 1) {
-		numDeath++;
-		callEndgame();
-	}
-
 	Message msg = proto->getMessage();
 	
 	gLogic->receiveMessage(
@@ -112,36 +113,35 @@ void Server::treatMessage(Protocol* proto) {
 		proto->getHealthPoints()
 	);
 	
-}
-
-void Server::updateRenderPlayers(int currPlayers) {
-
-	// Temos mais 
-	if (currPlayers >= 2) {
-
-		// The listener socket is not ready, test all other sockets (the clients)
-		for (std::vector< std::pair< sf::TcpSocket*, std::string>>::iterator it = clients.begin(); it != clients.end(); ++it) {
-
-			sf::TcpSocket* client = it->first;
-
-			// Send an answer
-			Protocol* retorno = new Protocol();
-			Message msg;
-
-			// 1- Render, 2- Status
-			msg.setMessageType(1);
-
-			// 1- No players, 2 - two players
-			msg.setTypeCommand(2);
-
-			retorno->setClientName("Server");
-			retorno->setMessage(msg);
-
-			client->send(retorno, sizeof(Protocol));
-		}
-
+	if (proto->getHealthPoints() < 1) {
+		numDeath++;
+		callEndgame();
 	}
 
+}
+
+void Server::updateRenderPlayers() {
+
+	// The listener socket is not ready, test all other sockets (the clients)
+	for (std::vector< std::pair< sf::TcpSocket*, std::string>>::iterator it = clients.begin(); it != clients.end(); ++it) {
+
+		sf::TcpSocket* client = it->first;
+
+		// Send an answer
+		Protocol* retorno = new Protocol();
+		Message msg;
+
+		// 1- Render, 2- Status
+		msg.setMessageType(1);
+
+		// 1- 1 Player, 2 - two players, 3 - enemy player healthpoints
+		msg.setTypeCommand(2);
+
+		retorno->setClientName("Server");
+		retorno->setMessage(msg);
+
+		client->send(retorno, sizeof(Protocol));
+	}
 
 }
 

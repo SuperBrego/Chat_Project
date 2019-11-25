@@ -17,6 +17,10 @@ class Render {
 	bool waitingResponse;
 	int endgame;
 
+	// Render Second player
+	bool renderPlayer2;
+	int enemyCurrHearts;
+
 	// Shapes
 	sf::RectangleShape* background;
 	sf::RectangleShape* spaceBar;
@@ -24,6 +28,7 @@ class Render {
 
 	std::vector<sf::RectangleShape*> itens;
 	std::vector<sf::RectangleShape*> hearts;
+	std::vector<sf::RectangleShape*> enemyHearts;
 
 	sf::Text* spaceBarTxt;
 	sf::Text* playerName;
@@ -56,6 +61,7 @@ public:
 	void setCurrentHearts(int hearts) { currentHearts = hearts; }
 	void setCurrentState(int st) { state = st; }
 	void setCurrentDirection(int dir) { direction = dir; }
+	void setRenderSecondPlayer(bool rend) { renderPlayer2 = rend; }
 	void setWaitingServer(bool isWaiting) { waitingResponse = isWaiting; }
 	void setEndgame(int end) { endgame = end; }
 

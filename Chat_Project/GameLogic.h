@@ -1,6 +1,7 @@
 #include <utility>
 #include <string>
 #include <vector>
+#include <time>
 
 #include "Protocol.h"
 #include "Character.h"

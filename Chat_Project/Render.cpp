@@ -143,6 +143,18 @@ void Render::settingUpHearts() {
 		hearts.push_back(heart);
 	}
 
+	// Enemy hearts
+	x = character2.getOrigin().x + 50;
+	y = window->getView().getViewport().height - 550;
+
+	for (int i = 0; i < 5; i++) {
+		heart = new sf::RectangleShape();
+		heart->setSize(sf::Vector2f(30, 30));
+		heart->setOrigin(sf::Vector2f(x + (i * 35), y));
+		heart->setTexture(texture);
+		enemyHearts.push_back(heart);
+	}
+
 }
 
 void Render::settingUpText() {
@@ -208,7 +220,16 @@ void Render::drawGame() {
 
 	// Desenha personagens
 	window->draw(character1);
+
+	//if (renderPlayer2) {
 	window->draw(character2);
+
+	// Desenha os corações.
+	for (int i = 0; i < enemyCurrHearts; i++) {
+		window->draw(*enemyHearts.at(i));
+	}
+
+	//}
 	
 	// Desenha os corações.
 	for (int i = 0; i < currentHearts; i++) {
