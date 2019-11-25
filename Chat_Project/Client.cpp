@@ -1,18 +1,20 @@
 #include "Client.h"
 
 Client::Client() {
-
 	
-
+	// Itens iniciais do cliente.
+	currentHealth = 3;
+	state = 0;
+	direction = 0;
+	endgame = false;
 	client_name = "";
 
-	char exit_prompt;
+	// Se não conectou, sai.
 	if (!connect()) {
 		printf("==== Nao ha nenhum servidor rodando. Por favor entre em contato com o servidor e tente novamente. ====\n");
-		std::cin >> exit_prompt;
-		std::cin.ignore();
-
+		system("pause");
 	}
+	// Se conectou, primeiro envia o login.
 	else {
 
 		char login[100];
@@ -26,7 +28,7 @@ Client::Client() {
 		// Envia Login
 		if (socket.send(login, 100) == sf::Socket::Done) {
 		
-			// Receive an answer from the server
+			// Recebe retorno do servidor.
 			char buffer[1024];
 			std::size_t received = 0;
 			socket.receive(buffer, sizeof(buffer), received);
@@ -34,8 +36,10 @@ Client::Client() {
 
 			message = new Protocol();
 			message->setClientName(client_name);
-			message->setPlayerCharacter(playerData);
+			message->setHealthPoints(currentHealth);
 
+			// Inicia a aplicação
+			startRender();
 			run();
 		}
 	}
@@ -58,38 +62,72 @@ int Client::connect() {
 	return 1;
 }
 
-void Client::run() {
+void Client::startRender() {
 
-	// RENDERING TEM QUE SER UMA THREAD
 	render = new Render();
+	render->setCurrentHearts(currentHealth);
+	render->setCurrentState(state);
+	render->setCurrentDirection(direction);
 	render->startApplication();
 
-	//sf::Thread renderWindow(&Client::ClientRender, this);
-
-	//renderWindow.launch();
+}
 
 
-	while (true) {
+void Client::run() {
 
-		// clientRender();
-	
-		commandValidation();
+	// Pronto para enviar mensagem.
+	readySent = false;
 
-		printf("=== Enviando Mensagem ===\n");
-		// TCP socket:
-		if (socket.send(message, sizeof(Protocol)) != sf::Socket::Done) {
-			printf("Erro on Sent.\n");
+	/* Loop da Aplicação */
+	while (render->getWindow()->isOpen()) {
+
+		sf::Event event;
+		
+		// Update da vida.
+		message->setHealthPoints(currentHealth);
+
+		// Poll Events
+		while (render->getWindow()->pollEvent(event)) {
+			// "close requested" event: we close the window
+			if (event.type == sf::Event::Closed) {
+				render->getWindow()->close();
+			}
+			if (event.type == sf::Event::KeyPressed) {
+				commandValidation();
+			}
 		}
 
-		// Receive an answer from the server
-		Protocol* serverReply = new Protocol();
-		std::size_t received = 0;
-		sf::Socket::Status status = socket.receive(serverReply, sizeof(Protocol), received);
 
-		printf("== Aguardando resposta do servidor ==\n");
-		while (status != sf::Socket::Done) { }
-		printf("== ------------------------------ ==\n");
-		extractReply(serverReply);
+		// Clear Screen
+		render->getWindow()->clear(sf::Color::Black);
+
+		// Draw Everything
+		render->drawGame();
+
+		// End the current frame
+		render->getWindow()->display();
+
+		// Caso a mensagem esteja pronta.
+		if (readySent && !endgame) {
+
+			// TCP socket:
+			if (socket.send(message, sizeof(Protocol)) != sf::Socket::Done) {
+				printf("Perdeu contato com servidor. Erro no cliente %s.\n", client_name.c_str());
+			}
+
+			// Recebe resposta do servidor
+			Protocol* serverReply = new Protocol();
+			std::size_t received = 0;
+			sf::Socket::Status status = socket.receive(serverReply, sizeof(Protocol), received);
+
+			printf("== Aguardando resposta do servidor ==\n");
+			while (status != sf::Socket::Done) {}
+			extractReply(serverReply);
+
+
+			// Aguardar proxima mensagem
+			readySent = false;
+		}
 
 	}
 
@@ -97,61 +135,57 @@ void Client::run() {
 
 void Client::commandValidation() {
 
-	int type;
-	int dir;
-
-	printf("\n=== Qual o tipo de acao: ===\n");
-	printf("- 1: Ataque\n");
-	printf("- 2: Bloquear\n");
-	printf("- 3: Esquivar\n");
-	printf("==================\n");
-	std::cin >> type;
-	while (type > 3 || type < 1) {
-		printf("Comando Invalido.\n");
-		printf("=== Qual o tipo de acao: ===\n");
-		printf("- 1: Ataque\n");
-		printf("- 2: Bloquear\n");
-		printf("- 3: Esquivar\n");
-		printf("==================\n");
-		std::cin >> type;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+		render->getWindow()->close();
+		return;
 	}
-	printf("\n");
-	
-	if (type < 3) {
-		printf("=== Qual direcao? ===\n");
-		printf("- 0: Cima\n");
-		printf("- 1: Baixo\n");
-		printf("- 2: Esquerda\n");
-		printf("- 3: Direita\n");
-		printf("==================\n");
-		std::cin >> dir;
-		while (dir > 3 || dir < 0) {
-			printf("Comando Invalido.\n");
-			printf("=== Qual o tipo de acao: ===\n");
-			printf("- 0: Cima\n");
-			printf("- 1: Baixo\n");
-			printf("- 2: Esquerda\n");
-			printf("- 3: Direita\n");
-			printf("==================\n");
-			std::cin >> dir;
+
+	// Atualizando a seleção
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		if (direction <= 0) direction = 0;
+		else direction--;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		if (direction >= 3) direction = 3;
+		else direction++;
+	}
+
+	// Atualiza Direcao
+	render->setCurrentDirection(direction);
+
+	// Atualizando os Itens
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		if (state == 2) {
+			state = 0;
 		}
-		
+		else state += 1;
 	}
-	//Esquiva
-	else {
-		dir = 0;
+	
+	// Atualiza Status
+	render->setCurrentState(state);
+
+	// Atualiza os itens do Render.
+	render->Update();
+	
+	// Enviar comando
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+		Message msg;
+
+		msg.setMessageType(state);
+		msg.setTypeCommand(direction);
+		message->setMessage(msg);
+		readySent = true;
+		render->setWaitingServer(true);
+
 	}
-	printf("\n");
 
-	Message msg;
-
-	msg.setMessageType(type);
-	msg.setTypeCommand(dir);
-	message->setMessage(msg);
 }
 
 void Client::extractReply(Protocol* reply) {
 	
+	render->setWaitingServer(false);
+
 	// Mensagem de Render
 	if (reply->getMessage().getMessageType() == 1) {
 		int renderPlural = reply->getMessage().getTypeCommand();
@@ -165,24 +199,43 @@ void Client::extractReply(Protocol* reply) {
 	}
 
 	// Mensagem de Status
-	if (reply->getMessage().getMessageType() == 2) {
+	else if (reply->getMessage().getMessageType() == 2) {
 
-		Character serverCharData = reply->getPlayerData();
-		this->playerData.setHealthPoints(
-			this->playerData.getHealthPoints() +
-			serverCharData.getHealthPoints()
-		);
+		int hp = reply->getHealthPoints();
+		currentHealth = hp;
+
+		// Atualiza vida no Render.
+		render->setCurrentHearts(currentHealth);
+
 		system("cls");
 		printf("=== Player %s ===\n", this->client_name.c_str());
 		printf("==== Pontos de Vida Total: ====\n");
-		printf("===== %d =====\n", this->playerData.getHealthPoints());
+		printf("===== %d =====\n", this->getHealthPoints());
 
 	}
+	// Mensagem de Fim de Jogo
+	else if (reply->getMessage().getMessageType() == 3) {
+		
+		endgame = true;
 
-}
+		// Empate
+		if (reply->getMessage().getTypeCommand() == 1) {
+			// Render victory
+			printf("=== Os dois jogadores perderam! Tivemos um empate! ===\n");
+			render->setEndgame(1);
+		}
+		else {
 
-void Client::ClientRender() {
+			render->setEndgame(2);
+			if (this->currentHealth > 0) {
+				// Render victory
+				printf("=== Player %s e vencedor deste jogo! ===\n", this->client_name.c_str());
+			}
+			else {
+				// Render defeat
+				printf("=== Player %s e foi derrotado desta vez! ===\n", this->client_name.c_str());
+			}
+		}
 
-	render->awaitScreen();
-
+	}
 }

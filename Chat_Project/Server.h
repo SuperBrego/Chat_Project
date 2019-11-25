@@ -9,11 +9,14 @@
 #include "Protocol.h"
 #include "GameLogic.h"
 #include "Message.h"
+#include "Render.h"
 
 #pragma once
 
 class Server {
 
+	// is server...
+	bool running;
 	// Create a socket to listen to new connections
 	sf::TcpListener listener;
 	// Create a list to store the future clients
@@ -22,6 +25,7 @@ class Server {
 	sf::SocketSelector selector;
 	// Recebe os dados vindo do cliente
 	std::size_t received;
+	int numDeath;
 
 	GameLogic* gLogic;
 
@@ -31,9 +35,8 @@ public:
 	void run();
 	void connectClient(sf::TcpSocket* client);	
 	void treatMessage(Protocol* message);
-
 	void replyClients();
-	void replyClients(sf::TcpSocket* client);
 
 	void updateRenderPlayers(int currPlayers);
+	void callEndgame();
 };

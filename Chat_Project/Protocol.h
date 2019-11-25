@@ -11,7 +11,7 @@ class Protocol {
 
 	std::string clientName;
 	Message message;
-	Character playerData;
+	int currentHealth;
 
 public:
 	Protocol() {
@@ -19,13 +19,13 @@ public:
 	};
 	~Protocol() {};
 
-	void setClientName(std::string name);
-	void setMessage(Message msg);
-	void setPlayerCharacter(Character data);
+	void Protocol::setClientName(std::string name) { clientName = name; }
+	void Protocol::setMessage(Message msg) { message = msg; }
+	void Protocol::setHealthPoints(int hp) { currentHealth = hp; }
 
-	std::string getclientName();
-	Message getMessage();
-	Character getPlayerData();
+	std::string Protocol::getclientName() { return clientName; }
+	Message Protocol::getMessage() { return message; }
+	int Protocol::getHealthPoints() { return currentHealth; }
 	
 	void toString();
 

@@ -135,6 +135,7 @@
     <ClInclude Include="ApplicationFlow.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="ClientInfo.h" />
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="Protocol.h" />

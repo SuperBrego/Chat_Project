@@ -26,19 +26,12 @@ public:
 	}
 	~GameLogic() {}
 
-	void receiveMessage(std::string login, int action, int direction);
+	void receiveMessage(std::string login, int action, int direction, int healthPoints);
 
 	void reset();
 	void gameStep();
 
 	int gameStepReady() { return readyStep; }
-	int getPlayerHP(std::string playerName) {
-
-		for (int i = 0; i < playerMessages.size(); i++) {
-			if (playerMessages.at(i)->login == playerName) {
-				return playerMessages.at(i)->currentHealthPoints;
-			}
-		}
-	}
+	int getPlayerHP(std::string playerName);
 
 };

@@ -3,7 +3,7 @@
 #pragma once
 
 class Character {
-	int health_points = 3;
+	int health_points;
 	std::string sprite_path = "";
 
 public:

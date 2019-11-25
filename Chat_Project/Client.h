@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <thread>
 
 #include <SFML/Network.hpp>
 
@@ -13,10 +14,14 @@ class Client {
 	sf::TcpSocket socket;
 	std::string client_name;
 	Protocol* message;
-	Character playerData;
 	Render* render;
+	
+	int currentHealth;
+	int direction;
+	int state;
 
-	int numPlayers;
+	bool readySent;
+	bool endgame;
 
 	void commandValidation();
 
@@ -25,7 +30,11 @@ public:
 	~Client() {}
 
 	int connect();
+	void startRender();
 	void run();
 	void extractReply(Protocol* reply);
-	void ClientRender();
+	
+
+	void setHealthPoints(int hp) { currentHealth = hp; }
+	int getHealthPoints() { return currentHealth; }
 };
